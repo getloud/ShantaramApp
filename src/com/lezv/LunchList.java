@@ -2,10 +2,8 @@ package com.lezv;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.*;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioGroup;
 
 public class LunchList extends Activity {
     Restaurant r = new Restaurant();
@@ -17,6 +15,19 @@ public class LunchList extends Activity {
 
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
+
+        TableLayout tL = (TableLayout) findViewById(R.id.table_lay);
+
+        RadioButton[] rButton = new RadioButton[5];
+        RadioGroup rGroup = new RadioGroup(this);
+        rGroup.setOrientation(RadioGroup.HORIZONTAL);
+        for(int i = 0; i < 5; i++){
+             rButton[i] = new RadioButton(this);
+             rButton[i].setText("RB" + i);
+             rGroup.addView(rButton[i]);
+        }
+        tL.addView(rGroup);
+
     }
 
     private View.OnClickListener onSave=new View.OnClickListener() {
@@ -40,4 +51,10 @@ public class LunchList extends Activity {
             }
         }
     };
+
+
+
+
+
+
 }
