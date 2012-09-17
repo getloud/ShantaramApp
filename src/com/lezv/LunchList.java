@@ -17,7 +17,6 @@ public class LunchList extends Activity {
         save.setOnClickListener(onSave);
 
         TableLayout tL = (TableLayout) findViewById(R.id.table_lay);
-
         RadioButton[] rButton = new RadioButton[5];
         RadioGroup rGroup = new RadioGroup(this);
         rGroup.setOrientation(RadioGroup.HORIZONTAL);
