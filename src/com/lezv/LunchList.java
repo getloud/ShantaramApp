@@ -2,6 +2,7 @@ package com.lezv;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.*;
 import android.view.View;
 
@@ -10,6 +11,7 @@ public class LunchList extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        ScrollView sV = new ScrollView(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -17,15 +19,18 @@ public class LunchList extends Activity {
         save.setOnClickListener(onSave);
 
         TableLayout tL = (TableLayout) findViewById(R.id.table_lay);
-        RadioButton[] rButton = new RadioButton[5];
+
+
+        RadioButton[] rButton = new RadioButton[8];
         RadioGroup rGroup = new RadioGroup(this);
-        rGroup.setOrientation(RadioGroup.HORIZONTAL);
-        for(int i = 0; i < 5; i++){
+        rGroup.setOrientation(RadioGroup.VERTICAL);
+        for(int i = 0; i < 8; i++){
              rButton[i] = new RadioButton(this);
              rButton[i].setText("RB" + i);
              rGroup.addView(rButton[i]);
         }
-        tL.addView(rGroup);
+        sV.addView(rGroup, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        tL.addView(sV);
 
     }
 
