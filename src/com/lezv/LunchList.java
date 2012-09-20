@@ -6,36 +6,41 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LunchList extends Activity {
-    Restaurant r = new Restaurant();
+    List<Restaurant> model  = new ArrayList<Restaurant>();
+    ArrayAdapter<Restaurant> adapter = null;
+    private static final String[] ADDRESS = new String[] {
+            "Grinchenka", "Smelyanskaya"
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ScrollView sV = new ScrollView(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
 
-        TableLayout tL = (TableLayout) findViewById(R.id.table_lay);
+        Spinner list=(Spinner)findViewById(R.id.restaurants);
+        adapter=new ArrayAdapter<Restaurant>(this,
+                android.R.layout.simple_spinner_item,
+                model);
+        list.setAdapter(adapter);
 
 
-        RadioButton[] rButton = new RadioButton[8];
-        RadioGroup rGroup = new RadioGroup(this);
-        rGroup.setOrientation(RadioGroup.VERTICAL);
-        for(int i = 0; i < 8; i++){
-             rButton[i] = new RadioButton(this);
-             rButton[i].setText("RB" + i);
-             rGroup.addView(rButton[i]);
-        }
-        sV.addView(rGroup, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        tL.addView(sV);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, ADDRESS);
+        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.addr);
+        textView.setAdapter(adapter1);
 
     }
 
     private View.OnClickListener onSave=new View.OnClickListener() {
         public void onClick(View v) {
+            Restaurant r = new Restaurant();
             EditText name=(EditText)findViewById(R.id.name);
             EditText address=(EditText)findViewById(R.id.addr);
             r.setName(name.getText().toString());
@@ -53,6 +58,7 @@ public class LunchList extends Activity {
                     r.setType("delivery");
                     break;
             }
+            adapter.add(r);
         }
     };
 
