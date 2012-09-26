@@ -13,9 +13,9 @@ import java.util.List;
 public class LunchList extends Activity {
     List<Restaurant> model  = new ArrayList<Restaurant>();
     ArrayAdapter<Restaurant> adapter = null;
-    private static final int ROW_TYPE_DELIEVRY = 1;
+    private static final int ROW_TYPE_SIT_DOWN = 1;
     private static final int ROW_TYPE_TAKE_OUT = 2;
-    private static final int ROW_TYPE_SIT_DOWN = 3;
+    private static final int ROW_TYPE_DELIVERY = 3;
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya"
     };
@@ -80,7 +80,7 @@ public class LunchList extends Activity {
         public int getItemViewType(int position){
             String type = model.get(position).getType();
             if (type == "delivery" ){
-                return ROW_TYPE_DELIEVRY ;
+                return ROW_TYPE_DELIVERY ;
             }
             else if (type == "take_out") {
                  return ROW_TYPE_TAKE_OUT;
@@ -97,7 +97,7 @@ public class LunchList extends Activity {
             if (row==null) {
                 LayoutInflater inflater=getLayoutInflater();
                 switch(getItemViewType(position)){
-                    case ROW_TYPE_DELIEVRY :
+                    case ROW_TYPE_DELIVERY :
                         row=inflater.inflate(R.layout.row_delivery_type, parent, false);
                         break;
                     case ROW_TYPE_TAKE_OUT :
