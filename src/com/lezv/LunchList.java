@@ -13,6 +13,9 @@ import java.util.List;
 public class LunchList extends Activity {
     List<Restaurant> model  = new ArrayList<Restaurant>();
     ArrayAdapter<Restaurant> adapter = null;
+    private static final int ROW_TYPE_DELIEVRY = 1;
+    private static final int ROW_TYPE_TAKE_OUT = 2;
+    private static final int ROW_TYPE_SIT_DOWN = 3;
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya"
     };
@@ -69,13 +72,41 @@ public class LunchList extends Activity {
 
         }
 
+        public int getViewTypeCount() {
+            return 3;
+        }
+
+
+        public int getItemViewType(int position){
+            String type = model.get(position).getType();
+            if (type == "delivery" ){
+                return ROW_TYPE_DELIEVRY ;
+            }
+            else if (type == "take_out") {
+                 return ROW_TYPE_TAKE_OUT;
+            }
+            else
+                return ROW_TYPE_SIT_DOWN;
+        }
+
+
         public View getView(int position, View convertView,
                             ViewGroup parent) {
             View row=convertView;
             RestaurantHolder holder=null;
             if (row==null) {
                 LayoutInflater inflater=getLayoutInflater();
-                row=inflater.inflate(R.layout.row, parent, false);
+                switch(getItemViewType(position)){
+                    case ROW_TYPE_DELIEVRY :
+                        row=inflater.inflate(R.layout.row_delivery_type, parent, false);
+                        break;
+                    case ROW_TYPE_TAKE_OUT :
+                        row=inflater.inflate(R.layout.row_take_out_type, parent, false);
+                        break;
+                    default:
+                        row=inflater.inflate(R.layout.row_sit_down_type, parent, false);
+                        break;
+                }
                 holder=new RestaurantHolder(row);
                 row.setTag(holder);
             }
@@ -101,12 +132,15 @@ public class LunchList extends Activity {
             name.setText(r.getName());
             address.setText(r.getAddress());
             if (r.getType().equals("sit_down")) {
+                name.setTextColor(-65536);
                 icon.setImageResource(R.drawable.ball_red);
             }
             else if (r.getType().equals("take_out")) {
+                name.setTextColor(-256);
                 icon.setImageResource(R.drawable.ball_yellow);
             }
             else {
+                name.setTextColor(-16711936);
                 icon.setImageResource(R.drawable.ball_green);
             }
         }
