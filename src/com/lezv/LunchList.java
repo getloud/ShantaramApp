@@ -79,14 +79,17 @@ public class LunchList extends Activity {
 
         public int getItemViewType(int position){
             String type = model.get(position).getType();
+            int result = 0;
             if (type == "delivery" ){
-                return ROW_TYPE_DELIVERY ;
+                result = ROW_TYPE_DELIVERY ;
             }
             else if (type == "take_out") {
-                 return ROW_TYPE_TAKE_OUT;
+                result = ROW_TYPE_TAKE_OUT;
             }
-            else
-                return ROW_TYPE_SIT_DOWN;
+            else if(type == "sit_down")  {
+                result = ROW_TYPE_SIT_DOWN;
+            }
+            return result;
         }
 
 
