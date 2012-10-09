@@ -13,9 +13,9 @@ import java.util.List;
 public class LunchList extends Activity {
     List<Restaurant> model  = new ArrayList<Restaurant>();
     ArrayAdapter<Restaurant> adapter = null;
-    private static final int ROW_TYPE_SIT_DOWN = 1;
-    private static final int ROW_TYPE_TAKE_OUT = 2;
-    private static final int ROW_TYPE_DELIVERY = 3;
+    private static final int ROW_TYPE_SIT_DOWN = 0;
+    private static final int ROW_TYPE_TAKE_OUT = 1;
+    private static final int ROW_TYPE_DELIVERY = 2;
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya"
     };
