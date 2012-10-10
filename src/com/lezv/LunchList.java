@@ -17,7 +17,7 @@ public class LunchList extends Activity {
     private static final int ROW_TYPE_TAKE_OUT = 1;
     private static final int ROW_TYPE_DELIVERY = 2;
     private static final String[] ADDRESS = new String[] {
-            "Grinchenka", "Smelyanskaya"
+            "Grinchenka", "Smelyanskaya" , "Julyanskaya"
     };
 
     @Override
