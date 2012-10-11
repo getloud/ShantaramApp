@@ -1,5 +1,7 @@
 package com.lezv;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: oleksandr.lezvinskyi
@@ -11,6 +13,16 @@ public class Restaurant {
     private String name = "";
     private String address = "";
     private String type = "";
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    private Date date = null;
 
     public String getName() {
         return name;

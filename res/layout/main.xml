@@ -35,8 +35,12 @@
                     <EditText android:id="@+id/addr" />
                 </TableRow>
                 <TableRow>
-                    <TextView android:text="Address:" />
-                    <EditText android:id="@+id/date" />
+                    <TextView android:text="Date:" />
+                    <EditText android:id="@+id/date"
+                    android:editable="false"
+                    android:cursorVisible="false"
+                    android:text="Set the Date"
+                    android:onClick="chooseDate"/>
                 </TableRow>
                 <TableRow>
                     <TextView android:text="Type:" />

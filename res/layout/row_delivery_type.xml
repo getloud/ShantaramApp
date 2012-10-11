@@ -33,5 +33,13 @@
                   android:maxLines="1"
                   android:ellipsize="end"
                 />
+        <TextView android:id="@+id/visitDate"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:maxLines="1"
+                  android:ellipsize="end"
+                />
     </LinearLayout>
 </LinearLayout>

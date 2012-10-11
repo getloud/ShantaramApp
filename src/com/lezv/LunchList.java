@@ -1,6 +1,7 @@
 package com.lezv;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.view.View;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class LunchList extends TabActivity {
@@ -23,6 +26,10 @@ public class LunchList extends TabActivity {
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya" , "Julyanskaya"
     };
+    DateFormat fmtDate= DateFormat.getDateInstance();
+    TextView dateLabel;
+    Calendar dateAndTime=Calendar.getInstance();
+
 
 
 
@@ -35,7 +42,7 @@ public class LunchList extends TabActivity {
         name=(EditText)findViewById(R.id.name);
         address=(EditText)findViewById(R.id.addr);
         types=(RadioGroup)findViewById(R.id.types);
-
+        dateLabel=(TextView)findViewById(R.id.date);
 
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
@@ -65,7 +72,31 @@ public class LunchList extends TabActivity {
         list.setOnItemClickListener(onListClick);
 
 
+        updateLabel();
+
     }
+
+    public void chooseDate(View v) {
+        new DatePickerDialog(LunchList.this, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    private void updateLabel() {
+        dateLabel.setText(fmtDate.format(dateAndTime.getTime()));
+    }
+    DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener()
+    {
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            dateAndTime.set(Calendar.YEAR, year);
+            dateAndTime.set(Calendar.MONTH, monthOfYear);
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        }
+    };
 
     private AdapterView.OnItemClickListener onListClick=new
             AdapterView.OnItemClickListener() {
@@ -75,6 +106,7 @@ public class LunchList extends TabActivity {
                     Restaurant r=model.get(position);
                     name.setText(r.getName());
                     address.setText(r.getAddress());
+                    dateLabel.setText((CharSequence) r.getDate());
                     if (r.getType().equals("sit_down")) {
                         types.check(R.id.sit_down);
                     }
@@ -93,9 +125,10 @@ public class LunchList extends TabActivity {
             Restaurant r = new Restaurant();
             EditText name=(EditText)findViewById(R.id.name);
             EditText address=(EditText)findViewById(R.id.addr);
+            EditText dateLabel=(EditText)findViewById(R.id.date);
             r.setName(name.getText().toString());
             r.setAddress(address.getText().toString());
-
+            r.setDate(dateLabel.getText().toString());
             RadioGroup types=(RadioGroup)findViewById(R.id.types);
             switch (types.getCheckedRadioButtonId()) {
                 case R.id.sit_down:
@@ -175,14 +208,17 @@ public class LunchList extends TabActivity {
         private TextView name=null;
         private TextView address=null;
         private ImageView icon=null;
+       private  TextView date=null;
         RestaurantHolder(View row) {
             name=(TextView)row.findViewById(R.id.title);
             address=(TextView)row.findViewById(R.id.address);
             icon=(ImageView)row.findViewById(R.id.icon);
+            date=(TextView)row.findViewById(R.id.date);
         }
         void populateFrom(Restaurant r) {
             name.setText(r.getName());
             address.setText(r.getAddress());
+            date.setText(r.getDate());
             if (r.getType().equals("sit_down")) {
                 name.setTextColor(-65536);
                 icon.setImageResource(R.drawable.ball_red);
