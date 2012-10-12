@@ -1,5 +1,6 @@
 package com.lezv;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -13,16 +14,18 @@ public class Restaurant {
     private String name = "";
     private String address = "";
     private String type = "";
+    private Calendar date = null;
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        String result = date.MONTH + " " + date.DATE + ", " + date.YEAR  ;
+        return  result;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
-    private Date date = null;
+
 
     public String getName() {
         return name;

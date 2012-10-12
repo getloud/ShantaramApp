@@ -10,8 +10,11 @@ import android.widget.*;
 import android.view.View;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class LunchList extends TabActivity {
@@ -29,6 +32,7 @@ public class LunchList extends TabActivity {
     DateFormat fmtDate= DateFormat.getDateInstance();
     TextView dateLabel;
     Calendar dateAndTime=Calendar.getInstance();
+
 
 
 
@@ -128,7 +132,7 @@ public class LunchList extends TabActivity {
             EditText dateLabel=(EditText)findViewById(R.id.date);
             r.setName(name.getText().toString());
             r.setAddress(address.getText().toString());
-            r.setDate(dateLabel.getText().toString());
+            r.setDate(address.getText().toString());
             RadioGroup types=(RadioGroup)findViewById(R.id.types);
             switch (types.getCheckedRadioButtonId()) {
                 case R.id.sit_down:
