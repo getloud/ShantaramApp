@@ -1,7 +1,10 @@
 package com.lezv;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,11 +17,10 @@ public class Restaurant {
     private String name = "";
     private String address = "";
     private String type = "";
-    private Calendar date = null;
+    private Calendar date ;
 
-    public String getDate() {
-        String result = date.MONTH + " " + date.DATE + ", " + date.YEAR  ;
-        return  result;
+    public Calendar getDate() {
+        return  date;
     }
 
     public void setDate(Calendar date) {
@@ -51,6 +53,29 @@ public class Restaurant {
     }
     public String toString() {
         return(getName());
+    }
+
+    public Calendar convertStringToCalendar (String date)  {
+        Calendar cal = Calendar.getInstance();
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        Date  myDate= new Date();
+        try {
+           myDate = df.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        cal.setTime(myDate);
+        return cal;
+    }
+
+    public String convertCalendarToString(Calendar date){
+         String month = date.getDisplayName(date.MONTH, date.SHORT, Locale.US);
+         int day = date.get(date.DATE);
+         int year = date.get(date.YEAR);
+        StringBuilder sb = new StringBuilder();
+        sb.append(month).append(" " + day).append(", " + year);
+         String  dateString = sb.toString();
+        return dateString;
     }
 
 }

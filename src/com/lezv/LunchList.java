@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -23,6 +24,7 @@ public class LunchList extends TabActivity {
     EditText name=null;
     EditText address=null;
     RadioGroup types=null;
+    EditText dateLabel = null;
     private static final int ROW_TYPE_SIT_DOWN = 0;
     private static final int ROW_TYPE_TAKE_OUT = 1;
     private static final int ROW_TYPE_DELIVERY = 2;
@@ -30,7 +32,6 @@ public class LunchList extends TabActivity {
             "Grinchenka", "Smelyanskaya" , "Julyanskaya"
     };
     DateFormat fmtDate= DateFormat.getDateInstance();
-    TextView dateLabel;
     Calendar dateAndTime=Calendar.getInstance();
 
 
@@ -46,7 +47,7 @@ public class LunchList extends TabActivity {
         name=(EditText)findViewById(R.id.name);
         address=(EditText)findViewById(R.id.addr);
         types=(RadioGroup)findViewById(R.id.types);
-        dateLabel=(TextView)findViewById(R.id.date);
+        dateLabel=(EditText)findViewById(R.id.date);
 
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
@@ -110,7 +111,7 @@ public class LunchList extends TabActivity {
                     Restaurant r=model.get(position);
                     name.setText(r.getName());
                     address.setText(r.getAddress());
-                    dateLabel.setText((CharSequence) r.getDate());
+                    dateLabel.setText(r.convertCalendarToString(r.getDate()));
                     if (r.getType().equals("sit_down")) {
                         types.check(R.id.sit_down);
                     }
@@ -132,7 +133,8 @@ public class LunchList extends TabActivity {
             EditText dateLabel=(EditText)findViewById(R.id.date);
             r.setName(name.getText().toString());
             r.setAddress(address.getText().toString());
-            r.setDate(address.getText().toString());
+            String dateString = dateLabel.getText().toString();
+            r.setDate(r.convertStringToCalendar(dateString));
             RadioGroup types=(RadioGroup)findViewById(R.id.types);
             switch (types.getCheckedRadioButtonId()) {
                 case R.id.sit_down:
@@ -217,12 +219,13 @@ public class LunchList extends TabActivity {
             name=(TextView)row.findViewById(R.id.title);
             address=(TextView)row.findViewById(R.id.address);
             icon=(ImageView)row.findViewById(R.id.icon);
-            date=(TextView)row.findViewById(R.id.date);
+            date=(TextView)row.findViewById(R.id.visitDate);
         }
         void populateFrom(Restaurant r) {
+            String  dateString = r.convertCalendarToString(r.getDate());
             name.setText(r.getName());
             address.setText(r.getAddress());
-            date.setText(r.getDate());
+            date.setText(dateString);
             if (r.getType().equals("sit_down")) {
                 name.setTextColor(-65536);
                 icon.setImageResource(R.drawable.ball_red);
