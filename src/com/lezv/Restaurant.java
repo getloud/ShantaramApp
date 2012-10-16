@@ -19,6 +19,16 @@ public class Restaurant {
     private String type = "";
     private Calendar date ;
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    private String notes ="";
+
     public Calendar getDate() {
         return  date;
     }

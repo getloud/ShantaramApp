@@ -5,10 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import android.view.View;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,21 +15,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import android.view.MenuItem ;
 
-public class LunchList extends Activity {
+public class LunchList extends TabActivity {
     List<Restaurant> model  = new ArrayList<Restaurant>();
     ArrayAdapter<Restaurant> adapter = null;
     EditText name=null;
     EditText address=null;
     RadioGroup types=null;
     EditText dateLabel = null;
+    EditText notes = null;
+    Restaurant current = null;
     private static final int ROW_TYPE_SIT_DOWN = 0;
     private static final int ROW_TYPE_TAKE_OUT = 1;
     private static final int ROW_TYPE_DELIVERY = 2;
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya" , "Julyanskaya"
     };
-    ViewFlipper flipper;
     DateFormat fmtDate= DateFormat.getDateInstance();
     Calendar dateAndTime=Calendar.getInstance();
 
@@ -41,7 +41,6 @@ public class LunchList extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -49,6 +48,8 @@ public class LunchList extends Activity {
         address=(EditText)findViewById(R.id.addr);
         types=(RadioGroup)findViewById(R.id.types);
         dateLabel=(EditText)findViewById(R.id.date);
+        notes = (EditText)findViewById(R.id.notes);
+
 
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
@@ -57,34 +58,27 @@ public class LunchList extends Activity {
         adapter=new RestaurantAdapter();
         list.setAdapter(adapter);
 
-        flipper=(ViewFlipper)findViewById(R.id.details);
 
 //        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
 //                android.R.layout.simple_dropdown_item_1line, ADDRESS);
 //        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.addr);
 //        textView.setAdapter(adapter1);
 
-//        TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
-//        spec.setContent(R.id.restaurants);
-//        spec.setIndicator("List", getResources()
-//                .getDrawable(R.drawable.list));
-//        getTabHost().addTab(spec);
-//        spec=getTabHost().newTabSpec("tag2");
-//        spec.setContent(R.id.details);
-//        spec.setIndicator("Details", getResources()
-//                .getDrawable(R.drawable.restaurant));
-//        getTabHost().addTab(spec);
-//        getTabHost().setCurrentTab(0);
+        TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
+        spec.setContent(R.id.restaurants);
+        spec.setIndicator("List", getResources()
+                .getDrawable(R.drawable.list));
+        getTabHost().addTab(spec);
+        spec=getTabHost().newTabSpec("tag2");
+        spec.setContent(R.id.details);
+        spec.setIndicator("Details", getResources()
+                .getDrawable(R.drawable.restaurant));
+        getTabHost().addTab(spec);
+        getTabHost().setCurrentTab(0);
 
         list.setOnItemClickListener(onListClick);
 
-
         updateLabel();
-
-    }
-
-    public void flip(View v) {
-        flipper.showNext();
     }
 
     public void chooseDate(View v) {
@@ -114,46 +108,45 @@ public class LunchList extends Activity {
                 public void onItemClick(AdapterView<?> parent,
                                         View view, int position,
                                         long id) {
-                    Restaurant r=model.get(position);
-                    name.setText(r.getName());
-                    address.setText(r.getAddress());
-                    dateLabel.setText(r.convertCalendarToString(r.getDate()));
-                    if (r.getType().equals("sit_down")) {
+                    current = model.get(position);
+                    name.setText(current.getName());
+                    address.setText(current.getAddress());
+                    dateLabel.setText(current.convertCalendarToString(current.getDate()));
+                    notes.setText(current.getNotes());
+                    if (current.getType().equals("sit_down")) {
                         types.check(R.id.sit_down);
                     }
-                    else if (r.getType().equals("take_out")) {
+                    else if (current.getType().equals("take_out")) {
                         types.check(R.id.take_out);
                     }
                     else {
                         types.check(R.id.delivery);
                     }
-//                    getTabHost().setCurrentTab(1);
+                    getTabHost().setCurrentTab(1);
                 }
             };
 
     private View.OnClickListener onSave=new View.OnClickListener() {
         public void onClick(View v) {
-            Restaurant r = new Restaurant();
-            EditText name=(EditText)findViewById(R.id.name);
-            EditText address=(EditText)findViewById(R.id.addr);
-            EditText dateLabel=(EditText)findViewById(R.id.date);
-            r.setName(name.getText().toString());
-            r.setAddress(address.getText().toString());
+            current = new Restaurant();
+            current.setName(name.getText().toString());
+            current.setAddress(address.getText().toString());
             String dateString = dateLabel.getText().toString();
-            r.setDate(r.convertStringToCalendar(dateString));
+            current.setDate(current.convertStringToCalendar(dateString));
+            current.setNotes(notes.getText().toString());
             RadioGroup types=(RadioGroup)findViewById(R.id.types);
             switch (types.getCheckedRadioButtonId()) {
                 case R.id.sit_down:
-                    r.setType("sit_down");
+                    current.setType("sit_down");
                     break;
                 case R.id.take_out:
-                    r.setType("take_out");
+                    current.setType("take_out");
                     break;
                 case R.id.delivery:
-                    r.setType("delivery");
+                    current.setType("delivery");
                     break;
             }
-            adapter.add(r);
+            adapter.add(current);
 
         }
     };
@@ -247,8 +240,24 @@ public class LunchList extends Activity {
         }
        }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.option, menu);
+        return(super.onCreateOptionsMenu(menu));
+    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==R.id.toast) {
+            String message="No restaurant selected";
+            if (current!=null) {
+                message=current.getNotes();
+            }
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            return(true);
+        }
+        return(super.onOptionsItemSelected(item));
+    }
 
 
 }
