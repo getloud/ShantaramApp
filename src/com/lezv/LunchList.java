@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class LunchList extends TabActivity {
+public class LunchList extends Activity {
     List<Restaurant> model  = new ArrayList<Restaurant>();
     ArrayAdapter<Restaurant> adapter = null;
     EditText name=null;
@@ -31,6 +31,7 @@ public class LunchList extends TabActivity {
     private static final String[] ADDRESS = new String[] {
             "Grinchenka", "Smelyanskaya" , "Julyanskaya"
     };
+    ViewFlipper flipper;
     DateFormat fmtDate= DateFormat.getDateInstance();
     Calendar dateAndTime=Calendar.getInstance();
 
@@ -56,29 +57,34 @@ public class LunchList extends TabActivity {
         adapter=new RestaurantAdapter();
         list.setAdapter(adapter);
 
+        flipper=(ViewFlipper)findViewById(R.id.details);
 
 //        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
 //                android.R.layout.simple_dropdown_item_1line, ADDRESS);
 //        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.addr);
 //        textView.setAdapter(adapter1);
 
-        TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
-        spec.setContent(R.id.restaurants);
-        spec.setIndicator("List", getResources()
-                .getDrawable(R.drawable.list));
-        getTabHost().addTab(spec);
-        spec=getTabHost().newTabSpec("tag2");
-        spec.setContent(R.id.details);
-        spec.setIndicator("Details", getResources()
-                .getDrawable(R.drawable.restaurant));
-        getTabHost().addTab(spec);
-        getTabHost().setCurrentTab(0);
+//        TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
+//        spec.setContent(R.id.restaurants);
+//        spec.setIndicator("List", getResources()
+//                .getDrawable(R.drawable.list));
+//        getTabHost().addTab(spec);
+//        spec=getTabHost().newTabSpec("tag2");
+//        spec.setContent(R.id.details);
+//        spec.setIndicator("Details", getResources()
+//                .getDrawable(R.drawable.restaurant));
+//        getTabHost().addTab(spec);
+//        getTabHost().setCurrentTab(0);
 
         list.setOnItemClickListener(onListClick);
 
 
         updateLabel();
 
+    }
+
+    public void flip(View v) {
+        flipper.showNext();
     }
 
     public void chooseDate(View v) {
@@ -121,7 +127,7 @@ public class LunchList extends TabActivity {
                     else {
                         types.check(R.id.delivery);
                     }
-                    getTabHost().setCurrentTab(1);
+//                    getTabHost().setCurrentTab(1);
                 }
             };
 
