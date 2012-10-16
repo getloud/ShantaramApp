@@ -1,8 +1,10 @@
 package com.lezv;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.*;
@@ -249,14 +251,31 @@ public class LunchList extends TabActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()==R.id.toast) {
-            String message="No restaurant selected";
+            String message="";
             if (current!=null) {
                 message=current.getNotes();
+            }
+            else {
+                showAlert();
+                return (true);
             }
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             return(true);
         }
         return(super.onOptionsItemSelected(item));
+    }
+
+    public void showAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Add restaurant")
+                .setNeutralButton("Close!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dlg, int sumthin) {
+//                        Toast.makeText(LunchList.this, "<clink, clink>",
+//                                        Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
     }
 
 
