@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -68,14 +69,14 @@ public class LunchList extends TabActivity {
 
         TabHost.TabSpec spec=getTabHost().newTabSpec("tag1");
         spec.setContent(R.id.restaurants);
-        spec.setIndicator("List", getResources()
-                .getDrawable(R.drawable.list));
+        spec.setIndicator("List", getResources().getDrawable(R.drawable.list));
         getTabHost().addTab(spec);
+
         spec=getTabHost().newTabSpec("tag2");
         spec.setContent(R.id.details);
-        spec.setIndicator("Details", getResources()
-                .getDrawable(R.drawable.restaurant));
+        spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant));
         getTabHost().addTab(spec);
+
         getTabHost().setCurrentTab(0);
 
         list.setOnItemClickListener(onListClick);
@@ -244,9 +245,30 @@ public class LunchList extends TabActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         new MenuInflater(this).inflate(R.menu.option, menu);
         return(super.onCreateOptionsMenu(menu));
+
     }
+     @Override
+     public boolean onPrepareOptionsMenu(Menu menu) {
+         int tab = getTabHost().getCurrentTab();
+         MenuItem itemList = menu.findItem(R.id.listMenu);
+         MenuItem itemDetails = menu.findItem(R.id.detailsMenu);
+         if (tab==0)    {
+             itemList.setVisible(false);
+             itemList.setEnabled(false);
+             itemDetails.setVisible(true);
+             itemDetails.setEnabled(true);
+         }
+         else if (tab==1)  {
+             itemDetails.setVisible(false);
+             itemDetails.setEnabled(false);
+             itemList.setVisible(true);
+             itemList.setEnabled(true);
+         }
+        return(true);
+     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -261,6 +283,16 @@ public class LunchList extends TabActivity {
             }
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             return(true);
+        }
+        else if(item.getItemId()==R.id.detailsMenu) {
+
+            getTabHost().setCurrentTab(1);
+            return(true);
+        }
+        else if (item.getItemId()==R.id.listMenu){
+            getTabHost().setCurrentTab(0);
+            return(true);
+
         }
         return(super.onOptionsItemSelected(item));
     }

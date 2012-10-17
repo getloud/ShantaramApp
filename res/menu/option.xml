@@ -4,4 +4,12 @@
           android:title="Raise Toast"
           android:icon="@drawable/toast"
             />
+    <item android:id="@+id/listMenu"
+          android:title="List"
+          android:icon="@drawable/list"
+            />
+    <item android:id="@+id/detailsMenu"
+          android:title="Details"
+          android:icon="@drawable/restaurant"
+            />
 </menu>
