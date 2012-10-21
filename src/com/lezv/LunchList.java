@@ -7,6 +7,7 @@ import android.app.TabActivity;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.view.*;
 import android.widget.*;
@@ -29,6 +30,7 @@ public class LunchList extends TabActivity {
     EditText dateLabel = null;
     EditText notes = null;
     Restaurant current = null;
+    int progress ;
     private static final int ROW_TYPE_SIT_DOWN = 0;
     private static final int ROW_TYPE_TAKE_OUT = 1;
     private static final int ROW_TYPE_DELIVERY = 2;
@@ -45,6 +47,7 @@ public class LunchList extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.main);
 
         name=(EditText)findViewById(R.id.name);
@@ -284,6 +287,13 @@ public class LunchList extends TabActivity {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             return(true);
         }
+        else if (item.getItemId()==R.id.run) {
+            setProgressBarVisibility(true);
+            progress=0;
+            new Thread(longTask).start();
+            return(true);
+        }
+
         else if(item.getItemId()==R.id.detailsMenu) {
 
             getTabHost().setCurrentTab(1);
@@ -294,6 +304,7 @@ public class LunchList extends TabActivity {
             return(true);
 
         }
+
         return(super.onOptionsItemSelected(item));
     }
 
@@ -310,5 +321,28 @@ public class LunchList extends TabActivity {
                 .show();
     }
 
+    private void doSomeLongWork(final int incr) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                progress+=incr;
+                setProgress(progress);
+            }
+        });
+        SystemClock.sleep(250); // should be something more useful!
+    }
+
+    private Runnable longTask=new Runnable() {
+        public void run() {
+            for (int i=0;i<20;i++) {
+                doSomeLongWork(500);
+            }
+
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    setProgressBarVisibility(false);
+                }
+            });
+        }
+    };
 
 }

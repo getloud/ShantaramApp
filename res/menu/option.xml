@@ -12,4 +12,8 @@
           android:title="Details"
           android:icon="@drawable/restaurant"
             />
+    <item android:id="@+id/run"
+          android:title="Run Long Task"
+          android:icon="@drawable/run"
+      />
 </menu>
